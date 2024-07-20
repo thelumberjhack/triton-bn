@@ -937,51 +937,37 @@ BINARYNINJACOREAPI char* BNGetMemoryMapDescription(BNBinaryView* view) {
 BINARYNINJACOREAPI bool BNAddBinaryMemoryRegion(BNBinaryView* view,
                                                 const char* name,
                                                 uint64_t start,
-                                                BNBinaryView* data,
-                                                uint32_t flags) {
+                                                BNBinaryView* data) {
   return {};
 }
 BINARYNINJACOREAPI bool BNAddDataMemoryRegion(BNBinaryView* view,
                                               const char* name, uint64_t start,
-                                              BNDataBuffer* data,
-                                              uint32_t flags) {
+                                              BNDataBuffer* data) {
   return {};
 }
 BINARYNINJACOREAPI bool BNAddRemoteMemoryRegion(BNBinaryView* view,
                                                 const char* name,
                                                 uint64_t start,
-                                                BNFileAccessor* accessor,
-                                                uint32_t flags) {
+                                                BNFileAccessor* accessor) {
   return {};
 }
 BINARYNINJACOREAPI bool BNRemoveMemoryRegion(BNBinaryView* view,
                                              const char* name) {
   return {};
 }
-BINARYNINJACOREAPI char* BNGetActiveMemoryRegionAt(BNBinaryView* view,
-                                                   uint64_t addr) {
-  return {};
-}
 BINARYNINJACOREAPI bool BNIsMemoryRegionEnabled(BNBinaryView* view,
-                                                const char* name) {
+                                                const char* name,
+                                                uint64_t start) {
   return {};
 }
 BINARYNINJACOREAPI bool BNSetMemoryRegionEnabled(BNBinaryView* view,
                                                  const char* name,
-                                                 bool enable) {
-  return {};
-}
-BINARYNINJACOREAPI bool BNIsMemoryRegionRebaseable(BNBinaryView* view,
-                                                   const char* name) {
-  return {};
-}
-BINARYNINJACOREAPI bool BNSetMemoryRegionRebaseable(BNBinaryView* view,
-                                                    const char* name,
-                                                    bool rebaseable) {
+                                                 uint64_t start, bool enable) {
   return {};
 }
 BINARYNINJACOREAPI bool BNSetMemoryRegionFill(BNBinaryView* view,
-                                              const char* name, uint8_t fill) {
+                                              const char* name, uint64_t start,
+                                              uint8_t fill) {
   return {};
 }
 BINARYNINJACOREAPI void BNResetMemoryMap(BNBinaryView* view) {}
@@ -1081,12 +1067,8 @@ BINARYNINJACOREAPI uint64_t BNGetNextValidOffset(BNBinaryView* view,
                                                  uint64_t offset) {
   return {};
 }
-BINARYNINJACOREAPI uint64_t BNGetImageBase(BNBinaryView* view) { return {}; }
-BINARYNINJACOREAPI uint64_t BNGetOriginalImageBase(BNBinaryView* view) {
-  return {};
-}
-BINARYNINJACOREAPI void BNSetOriginalImageBase(BNBinaryView* view,
-                                               uint64_t imageBase) {}
+BINARYNINJACOREAPI uint64_t BNGetOriginalBase(BNBinaryView* view) { return {}; }
+BINARYNINJACOREAPI void BNSetOriginalBase(BNBinaryView* view, uint64_t base) {}
 BINARYNINJACOREAPI uint64_t BNGetStartOffset(BNBinaryView* view) { return {}; }
 BINARYNINJACOREAPI uint64_t BNGetEndOffset(BNBinaryView* view) { return {}; }
 BINARYNINJACOREAPI uint64_t BNGetViewLength(BNBinaryView* view) { return {}; }
@@ -1136,12 +1118,6 @@ BINARYNINJACOREAPI BNRange* BNGetRelocationRangesAtAddress(BNBinaryView* view,
                                                            size_t* count) {
   return {};
 }
-BINARYNINJACOREAPI BNRange* BNGetRelocationRangesInRange(BNBinaryView* view,
-                                                         uint64_t addr,
-                                                         uint64_t size,
-                                                         size_t* count) {
-  return {};
-}
 BINARYNINJACOREAPI bool BNRangeContainsRelocation(BNBinaryView* view,
                                                   uint64_t addr, size_t size) {
   return {};
@@ -1153,7 +1129,6 @@ BINARYNINJACOREAPI BNRelocation** BNGetRelocationsAt(BNBinaryView* view,
 }
 BINARYNINJACOREAPI void BNFreeRelocationList(BNRelocation** relocations,
                                              size_t count) {}
-BINARYNINJACOREAPI void BNFreeRelocationRanges(BNRange* ranges) {}
 BINARYNINJACOREAPI void BNRegisterDataNotification(
     BNBinaryView* view, BNBinaryDataNotification* notify) {}
 BINARYNINJACOREAPI void BNUnregisterDataNotification(
@@ -1376,19 +1351,6 @@ BINARYNINJACOREAPI char** BNGetUniqueSectionNames(BNBinaryView* view,
                                                   size_t count) {
   return {};
 }
-BINARYNINJACOREAPI BNAddressRange* BNGetAllocatedRanges(BNBinaryView* view,
-                                                        size_t* count) {
-  return {};
-}
-BINARYNINJACOREAPI BNAddressRange* BNGetMappedAddressRanges(BNBinaryView* view,
-                                                            size_t* count) {
-  return {};
-}
-BINARYNINJACOREAPI BNAddressRange* BNGetBackedAddressRanges(BNBinaryView* view,
-                                                            size_t* count) {
-  return {};
-}
-BINARYNINJACOREAPI void BNFreeAddressRanges(BNAddressRange* ranges) {}
 BINARYNINJACOREAPI BNNameSpace* BNGetNameSpaces(BNBinaryView* view,
                                                 size_t* count) {
   return {};
@@ -1398,6 +1360,11 @@ BINARYNINJACOREAPI void BNFreeNameSpaceList(BNNameSpace* nameSpace,
 BINARYNINJACOREAPI BNNameSpace BNGetExternalNameSpace(void) { return {}; }
 BINARYNINJACOREAPI BNNameSpace BNGetInternalNameSpace(void) { return {}; }
 BINARYNINJACOREAPI void BNFreeNameSpace(BNNameSpace* name) {}
+BINARYNINJACOREAPI BNAddressRange* BNGetAllocatedRanges(BNBinaryView* view,
+                                                        size_t* count) {
+  return {};
+}
+BINARYNINJACOREAPI void BNFreeAddressRanges(BNAddressRange* ranges) {}
 BINARYNINJACOREAPI BNRegisterValueWithConfidence
 BNGetGlobalPointerValue(BNBinaryView* view) {
   return {};
@@ -7392,10 +7359,6 @@ BINARYNINJACOREAPI char* BNScriptingInstanceCompleteInput(
 }
 BINARYNINJACOREAPI void BNStopScriptingInstance(BNScriptingInstance* instance) {
 }
-BINARYNINJACOREAPI size_t BNFuzzyMatchSingle(const char* target,
-                                             const char* query) {
-  return {};
-}
 BINARYNINJACOREAPI void BNRegisterMainThread(BNMainThreadCallbacks* callbacks) {
 }
 BINARYNINJACOREAPI BNMainThreadAction* BNNewMainThreadActionReference(
@@ -8321,6 +8284,23 @@ BINARYNINJACOREAPI BNSegment* BNNewSegmentReference(BNSegment* seg) {
   return {};
 }
 BINARYNINJACOREAPI void BNFreeSegment(BNSegment* seg) {}
+BINARYNINJACOREAPI BNRange* BNSegmentGetRelocationRanges(BNSegment* segment,
+                                                         size_t* count) {
+  return {};
+}
+BINARYNINJACOREAPI uint64_t BNSegmentGetRelocationsCount(BNSegment* segment) {
+  return {};
+}
+BINARYNINJACOREAPI BNRange* BNSegmentGetRelocationRangesAtAddress(
+    BNSegment* segment, uint64_t addr, size_t* count) {
+  return {};
+}
+BINARYNINJACOREAPI bool BNSegmentRangeContainsRelocation(BNSegment* segment,
+                                                         uint64_t addr,
+                                                         size_t size) {
+  return {};
+}
+BINARYNINJACOREAPI void BNFreeRelocationRanges(BNRange* ranges) {}
 BINARYNINJACOREAPI uint64_t BNSegmentGetStart(BNSegment* segment) { return {}; }
 BINARYNINJACOREAPI uint64_t BNSegmentGetLength(BNSegment* segment) {
   return {};
