@@ -12,7 +12,8 @@ jobs:
       matrix:
         include:
         - os: ubuntu-22.04
-        - os: windows-2019
+        - os: macos-12
+        - os: windows-2022
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -33,7 +34,7 @@ jobs:
         cmake -E make_directory "${RUNNER_WORKSPACE}/build"
 
     - name: Enable Developer Command Prompt (Windows)
-      if: matrix.os == 'windows-2019'
+      if: matrix.os == 'windows-2022'
       uses: ilammy/msvc-dev-cmd@v1.13.0
 
     - name: Configure CMake
@@ -50,17 +51,21 @@ jobs:
       run: cmake --build . --config "${BUILD_TYPE}"
 
     - name: Upload Build Artifacts (Windows)
-      if: matrix.os == 'windows-2019'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
           name: triton_bn_win64
           path: ${{ runner.workspace }}\build\*.dll
-          retention-days: 5
 
     - name: Upload Build Artifacts (Ubuntu)
       if: matrix.os == 'ubuntu-22.04'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
           name: triton_bn_ubuntu2204
           path: ${{ runner.workspace }}/build/*.so
-          retention-days: 5
+
+    - name: Upload Build Artifacts (MacOS)
+      if: matrix.os == 'macos-12'
+      uses: actions/upload-artifact@v4
+      with:
+          name: triton_bn_macOS
+          path: ${{ runner.workspace }}/build/*.dylib
